@@ -348,6 +348,8 @@ def process_response(response: requests.Response, aes_key: bytes) -> QueryResult
         return QueryResult(False, 0, error="Invalid JSON response")
 
     if (status := result.get("responseCode")) != 200:
+        print(f"\nDebug - Full response (code {status}):")
+        print(json.dumps(result, indent=2, ensure_ascii=False))
         return QueryResult(False, status, error=result.get("error", "Unknown error"))
 
     try:
