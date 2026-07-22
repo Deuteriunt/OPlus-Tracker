@@ -98,6 +98,9 @@ python tomboy_pro.py <OTA_PREFIX> <REGION> [options]
 | `--anti 1`      | Bypass ColorOS 16 query restriction (~Oct 2025) | Usually + `--mode taste`           |
 | `--nvid 8digit` | Use custom NV Carrier ID to query               |                                    |
 | `--graynew 1`   | Query FWs not in taste mode but in gray server  |                                    |
+| `--recruit 1`   | Query for Beta Stage FWs which needs to apply  |                                    |
+| `--orginal_link 1`   | Print Original Link & Resolved Link  |                                    |
+| `--pki 1`   | For fix OS17 unable to query for Internal(Testing) Version  |                                    |
 
 #### Examples
 

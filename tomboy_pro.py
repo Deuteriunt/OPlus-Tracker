@@ -83,6 +83,7 @@ class QueryConfig:
     graynew: str = "0"
     recruitID: int = 0
     original_link: int = 0
+    pki: int = 0
 
 
 def generate_imei():
@@ -306,6 +307,9 @@ def query_update(config: QueryConfig) -> QueryResult:
         "deviceId": config.guid.lower(),
         "opex": {"check": True},
     }
+
+    request_body["isSuportPki"] = bool(config.pki)
+
     if config.components_input:
         request_body["components"] = parse_components(config.components_input)
     if config.recruitID:
@@ -348,6 +352,8 @@ def process_response(response: requests.Response, aes_key: bytes) -> QueryResult
         return QueryResult(False, 0, error="Invalid JSON response")
 
     if (status := result.get("responseCode")) != 200:
+        print(f"\nDebug - Full response (code {status}):")
+        print(json.dumps(result, indent=2, ensure_ascii=False))
         return QueryResult(False, status, error=result.get("error", "Unknown error"))
 
     try:
@@ -698,6 +704,14 @@ def parse_args():
         help="Output the original link before the resolved dynamic link"
     )
 
+    parser.add_argument(
+        "--pki",
+        type=int,
+        choices=[0, 1],
+        default=0,
+        help="Enable PKI signature verification"
+    )
+
     args = parser.parse_args()
 
     if not args.ota_prefix or not args.region:
@@ -731,6 +745,7 @@ def run_tomboy_query(args) -> bool:
         graynew=args.graynew,
         recruitID=args.recruit,
         original_link=args.original_link,
+        pki=args.pki,
     )
 
     ota_upper = args.ota_prefix.upper().replace("OVT", "Ovt")
